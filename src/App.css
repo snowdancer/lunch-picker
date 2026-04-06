@@ -1,0 +1,510 @@
+/* ============================================================
+   グローバル設定
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f7f6f2;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+  color: #333;
+}
+
+/* ============================================================
+   アプリ全体レイアウト
+   ============================================================ */
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+}
+
+/* ============================================================
+   ヘッダー
+   ============================================================ */
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-header h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0 0 4px;
+  color: #222;
+}
+
+.app-subtitle {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #999;
+}
+
+/* 時刻・天気バー */
+.info-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  color: #555;
+}
+
+.info-time {
+  font-weight: 600;
+  color: #444;
+}
+
+.info-weather {
+  color: #666;
+}
+
+/* ============================================================
+   フィルターパネル
+   ============================================================ */
+.filter-panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 20px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ジャンルと支払いを横並び */
+.filter-row {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-row .filter-item {
+  flex: 1;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* 徒歩時間ボタングループ */
+.walk-options {
+  display: flex;
+  gap: 8px;
+}
+
+.walk-btn {
+  flex: 1;
+  padding: 7px 0;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.walk-btn:hover {
+  border-color: #e07b00;
+  color: #e07b00;
+}
+
+.walk-btn.is-active {
+  background: #e07b00;
+  border-color: #e07b00;
+  color: #fff;
+  font-weight: 600;
+}
+
+.filter-select {
+  padding: 8px 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fafafa;
+  cursor: pointer;
+  color: #333;
+  appearance: auto;
+}
+
+.filter-select:focus {
+  outline: 2px solid #e07b00;
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+/* ============================================================
+   推薦パネル
+   ============================================================ */
+.rec-panel {
+  margin-bottom: 16px;
+}
+
+/* 推薦ボタン行 */
+.rec-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.rec-btn {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.rec-btn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.rec-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.rec-btn-random {
+  background: #e07b00;
+  color: #fff;
+}
+
+.rec-btn-quiz {
+  background: #4a90d9;
+  color: #fff;
+}
+
+/* 気分問卷ボックス */
+.quiz-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.quiz-step {
+  font-size: 12px;
+  color: #bbb;
+  margin: 0 0 6px;
+}
+
+.quiz-question {
+  font-size: 17px;
+  font-weight: bold;
+  color: #222;
+  margin: 0 0 20px;
+}
+
+.quiz-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.quiz-option-btn {
+  padding: 10px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 24px;
+  background: #fafafa;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #444;
+}
+
+.quiz-option-btn:hover {
+  border-color: #4a90d9;
+  color: #4a90d9;
+  background: #f0f6ff;
+}
+
+.rec-cancel {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: underline;
+}
+
+.rec-cancel:hover {
+  color: #888;
+}
+
+/* 推薦結果エリア */
+.rec-result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rec-result-label {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+/* 推薦されたカードのハイライト */
+.restaurant-card.is-highlighted {
+  border: 2px solid #e07b00;
+  box-shadow: 0 4px 20px rgba(224, 123, 0, 0.2);
+}
+
+.rec-result-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rec-result-actions .rec-btn {
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+/* ============================================================
+   検索結果件数表示
+   ============================================================ */
+.result-count {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 12px 4px;
+}
+
+/* ============================================================
+   レストランカード一覧（2カラムグリッド）
+   ============================================================ */
+.restaurant-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* ============================================================
+   レストランカード
+   ============================================================ */
+.restaurant-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.restaurant-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.11);
+  transform: translateY(-1px);
+}
+
+/* 定休日の店舗はグレーアウト */
+.restaurant-card.is-closed {
+  opacity: 0.45;
+}
+
+/* --- 画像エリア（2枚横並び） --- */
+.card-images {
+  position: relative;
+  display: flex;
+  width: 220px;
+  min-width: 220px;
+  flex-shrink: 0;
+}
+
+.card-image-slot {
+  flex: 1;
+  position: relative;
+  background: #f0ede6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 130px;
+}
+
+/* 2枚の間に区切り線 */
+.card-image-slot + .card-image-slot {
+  border-left: 1px solid #e8e4dc;
+}
+
+.card-image-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-placeholder {
+  font-size: 22px;
+  opacity: 0.3;
+}
+
+/* 店舗・料理ラベル */
+.image-label {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+/* 本日定休バッジ */
+.closed-badge {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  background: rgba(180, 0, 0, 0.75);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px 2px 6px;
+  border-radius: 0 4px 4px 0;
+  letter-spacing: 0.03em;
+  z-index: 1;
+}
+
+/* --- カード本体 --- */
+.card-body {
+  padding: 12px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-name {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 0;
+  color: #222;
+}
+
+/* タグ共通 */
+.tag-cuisine,
+.tag-rating {
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ジャンルタグ */
+.tag-cuisine {
+  font-size: 11px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: #fff3e0;
+  color: #c96a00;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Google評価タグ */
+.tag-rating {
+  background: #fef9e7;
+  color: #b7860a;
+}
+
+/* --- 店舗詳細情報 --- */
+.card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.detail-icon {
+  font-size: 13px;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* --- メモ --- */
+.card-note {
+  margin: 0;
+  font-size: 11px;
+  color: #999;
+  line-height: 1.5;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 6px;
+}
+
+/* ============================================================
+   レスポンシブ対応（スマートフォン）
+   ============================================================ */
+/* タブレット：1カラムに切り替え */
+@media (max-width: 720px) {
+  .restaurant-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* スマートフォン */
+@media (max-width: 480px) {
+  .app {
+    padding: 20px 12px 40px;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-images {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .card-image-slot {
+    min-height: 100px;
+  }
+
+  .card-name {
+    font-size: 15px;
+  }
+}
