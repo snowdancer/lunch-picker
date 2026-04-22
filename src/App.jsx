@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import './App.css'
 import {
-  restaurants,
   CUISINE_OPTIONS,
-  PAYMENT_OPTIONS,
   DAY_NAMES_JA,
+  DISH_TYPE_OPTIONS,
+  PAYMENT_OPTIONS,
+  restaurants,
   todayEn,
 } from './data/restaurants'
-import './App.css'
 
 // ============================================================
 // 天気コード（WMO）→ 日本語ラベル・絵文字変換マップ
@@ -74,6 +75,7 @@ export default function App() {
   // フィルター状態
   const [maxWalk, setMaxWalk] = useState(10)
   const [cuisine, setCuisine] = useState("すべて")
+  const [dishType, setDishType] = useState("すべて")
   const [payment, setPayment] = useState("すべて")
 
   // 現在時刻（1分ごとに更新）
@@ -115,6 +117,7 @@ export default function App() {
     .filter(r => {
       if (r.walkingMinutes !== null && r.walkingMinutes > maxWalk) return false
       if (cuisine !== "すべて" && r.cuisine !== cuisine) return false
+      if (dishType !== "すべて" && !(r.dishTypes ?? []).includes(dishType)) return false
       if (payment !== "すべて" && !r.payment.includes(payment)) return false
       return true
     })
@@ -210,7 +213,7 @@ export default function App() {
       {/* ヘッダー */}
       <header className="app-header">
         <h1>🍱 今日のランチどこ行く？</h1>
-        <p className="app-subtitle">今日は{DAY_NAMES_JA[todayEn]}曜日</p>
+        <p className="app-subtitle">今日は{DAY_NAMES_JA[todayEn]}日</p>
         <div className="info-bar">
           <span className="info-time">🕐 {timeLabel}</span>
           <span className="info-weather">
@@ -218,7 +221,7 @@ export default function App() {
             {weatherError   && "天気情報を取得できませんでした"}
             {weather && (() => {
               const { label, emoji } = getWeatherInfo(weather.weather_code)
-              return `${emoji} ${label}　${weather.temperature_2m}°C`
+              return `${emoji} ${label} ${weather.temperature_2m}°C`
             })()}
           </span>
         </div>
@@ -246,6 +249,12 @@ export default function App() {
             <label className="filter-label">🍽 ジャンル</label>
             <select value={cuisine} onChange={e => setCuisine(e.target.value)} className="filter-select">
               {CUISINE_OPTIONS.map(c => <option key={c}>{c}</option>)}
+            </select>
+          </div>
+          <div className="filter-item">
+            <label className="filter-label">🥘 料理タイプ</label>
+            <select value={dishType} onChange={e => setDishType(e.target.value)} className="filter-select">
+              {DISH_TYPE_OPTIONS.map(d => <option key={d}>{d}</option>)}
             </select>
           </div>
           <div className="filter-item">
@@ -347,20 +356,22 @@ function RestaurantCard({ restaurant: r, isClosed, isHighlighted = false }) {
   return (
     <div className={`restaurant-card ${isClosed ? 'is-closed' : ''} ${isHighlighted ? 'is-highlighted' : ''}`}>
 
-      {/* 画像エリア */}
+      {/* 画像エリア（shop・dish フォルダから ID.png を取得。存在しない場合は非表示） */}
       <div className="card-images">
         <div className="card-image-slot">
-          {r.images.shop
-            ? <img src={r.images.shop} alt={`${r.name} 店舗`} />
-            : <div className="image-placeholder">🏠</div>
-          }
+          <img
+            src={`/images/shop/${r.id}.png`}
+            alt={`${r.name} 店舗`}
+            onError={e => { e.target.closest('.card-image-slot').style.display = 'none' }}
+          />
           <span className="image-label">店舗</span>
         </div>
         <div className="card-image-slot">
-          {r.images.dish
-            ? <img src={r.images.dish} alt={`${r.name} 料理`} />
-            : <div className="image-placeholder">🍽️</div>
-          }
+          <img
+            src={`/images/dish/${r.id}.png`}
+            alt={`${r.name} 料理`}
+            onError={e => { e.target.closest('.card-image-slot').style.display = 'none' }}
+          />
           <span className="image-label">料理</span>
         </div>
         {isClosed && <div className="closed-badge">本日定休</div>}
