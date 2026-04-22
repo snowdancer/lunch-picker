@@ -20,35 +20,6 @@ export const DAY_NAMES_JA = {
 };
 
 /**
- * ジャンルの選択肢
- * 新しいジャンルを追加する場合はここに追記してください
- */
-export const CUISINE_OPTIONS = [
-  "すべて",
-  "日本料理",
-  "中華料理",
-  "インド料理",
-  "韓国料理",
-  "イタリア料理",
-  "アメリカ料理",
-  "タイ料理",
-  "ラーメン",
-  "つけ麺",
-  "うどん",
-  "そば",
-  "カレー",
-  "とんかつ",
-  "定食",
-  "ハンバーグ",
-  "ハンバーガー",
-  "焼肉",
-  "焼き鳥",
-  "寿司",
-  "海鮮",
-  "パスタ",
-];
-
-/**
  * 支払い方法の選択肢
  */
 export const PAYMENT_OPTIONS = [
@@ -98,7 +69,7 @@ export const restaurants = [
   {
     id: 12,
     name: "豚豚拍子",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 7,
     closedDays: ["Sunday"],
     priceRange: "¥1,600〜1,999",
@@ -162,7 +133,7 @@ export const restaurants = [
   {
     id: 16,
     name: "和食処いしばし",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 4,
     closedDays: ["Saturday", "Sunday"],
     priceRange: "¥1,000〜1,600",
@@ -208,22 +179,6 @@ export const restaurants = [
     images: { shop: null, dish: null },
   },
   {
-    id: 19,
-    name: "麺屋NOBUNAGA 茅場町店",
-    cuisine: "日本料理",
-    walkingMinutes: 8,
-    closedDays: [],
-    priceRange: "¥800〜1,500",
-    seats: null,
-    payment: ["現金"],
-    lunchHours: "10:00〜23:00",
-    googleRating: 4.8,
-    address: "東京都中央区日本橋茅場町2-13-14 V1Bldg 1F",
-    note: "濃厚魚介鶏白湯ラーメン専門店。TripAdvisor都内ラーメンランキング1位獲得。",
-    dishTypes: ["ラーメン"],
-    images: { shop: null, dish: null },
-  },
-  {
     id: 20,
     name: "VINOMONDO WINE&COFFEE",
     cuisine: "イタリア料理",
@@ -242,7 +197,7 @@ export const restaurants = [
   {
     id: 21,
     name: "つけ麺隅田",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 4,
     closedDays: ["Sunday"],
     priceRange: "¥800〜1,200",
@@ -290,7 +245,7 @@ export const restaurants = [
   {
     id: 24,
     name: "café blue bridge",
-    cuisine: "日本料理",
+    cuisine: "インド料理",
     walkingMinutes: 3,
     closedDays: [],
     priceRange: "¥1000〜1,500",
@@ -306,7 +261,7 @@ export const restaurants = [
   {
     id: 25,
     name: "とんかつ さくら",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 3,
     closedDays: ["Sunday"],
     priceRange: "¥1,000〜1,999",
@@ -320,25 +275,9 @@ export const restaurants = [
     images: { shop: null, dish: null },
   },
   {
-    id: 26,
-    name: "MR.OLDMAN DINER",
-    cuisine: "アメリカ料理",
-    walkingMinutes: 9,
-    closedDays: ["Sunday"],
-    priceRange: "¥1,200〜1,999",
-    seats: 20,
-    payment: ["現金", "カード","PayPay"],
-    lunchHours: "11:30〜14:00",
-    googleRating: 4.5,
-    address: "東京都江東区佐賀1-16-3 林マンション102",
-    note: "80年代ヴィンテージ感のアメリカンダイナー。ハンバーグカレーが人気。月〜金ランチにコーヒー1杯サービス。",
-    dishTypes: ["ハンバーグ", "カレー"],
-    images: { shop: null, dish: null },
-  },
-  {
     id: 27,
     name: "炭火焼き鳥 串八珍 新川店",
-    cuisine: "焼き鳥",
+    cuisine: "和食料理",
     walkingMinutes: 6,
     closedDays: ["Saturday", "Sunday"],
     priceRange: "¥800〜1,200",
@@ -354,7 +293,7 @@ export const restaurants = [
   {
     id: 28,
     name: "鮨 しんかわ",
-    cuisine: "寿司",
+    cuisine: "和食料理",
     walkingMinutes: 5,
     closedDays: ["Sunday"],
     priceRange: "¥1,000〜2,300",
@@ -386,7 +325,7 @@ export const restaurants = [
   {
     id: 30,
     name: "北海道 はなの舞 茅場町店",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 5,
     closedDays: [],
     priceRange: "¥1000〜1,500",
@@ -403,7 +342,7 @@ export const restaurants = [
   {
     id: 31,
     name: "藁焼き鰹たたき明神丸 GEMS茅場町店",
-    cuisine: "海鮮",
+    cuisine: "和食料理",
     walkingMinutes: 5,
     closedDays: ["Sunday"],
     priceRange: "¥1,000〜1,500",
@@ -453,7 +392,7 @@ export const restaurants = [
   {
     id: 34,
     name: "一席二鶏",
-    cuisine: "焼き鳥",
+    cuisine: "和食料理",
     walkingMinutes: 7,
     closedDays: ["Sunday"],
     priceRange: "¥1,000〜1,999",
@@ -486,7 +425,7 @@ export const restaurants = [
   {
     id: 36,
     name: "尾道ラーメン めでたい屋",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 2,
     closedDays: ["Sunday"],
     priceRange: "¥700〜1,000",
@@ -502,7 +441,7 @@ export const restaurants = [
   {
     id: 37,
     name: "焼肉とみひさ 茅場町店",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 5,
     closedDays: ["Sunday"],
     priceRange: "¥1,000〜1,999",
@@ -550,7 +489,7 @@ export const restaurants = [
   {
     id: 40,
     name: "寿司 藤右衛門",
-    cuisine: "日本料理",
+    cuisine: "和食料理",
     walkingMinutes: 5,
     closedDays: ["Saturday", "Sunday"],
     priceRange: "¥1000〜1,200",
@@ -563,6 +502,15 @@ export const restaurants = [
     dishTypes: ["寿司"],
     images: { shop: null, dish: null },
   },
+];
+
+/**
+ * ジャンルの選択肢（restaurants データから自動生成）
+ * 新しい cuisine を追加すると自動的に反映される
+ */
+export const CUISINE_OPTIONS = [
+  "すべて",
+  ...Array.from(new Set(restaurants.map(r => r.cuisine))).sort(),
 ];
 
 /**

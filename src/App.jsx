@@ -4,7 +4,6 @@ import {
   CUISINE_OPTIONS,
   DAY_NAMES_JA,
   DISH_TYPE_OPTIONS,
-  PAYMENT_OPTIONS,
   restaurants,
   todayEn,
 } from './data/restaurants'
@@ -43,9 +42,9 @@ function getWeatherInfo(code) {
 const OFFICE_LAT = 35.6784
 const OFFICE_LNG = 139.7836
 
-// 気分スコアリング用のジャンル分類
-const HEARTY_CUISINES = ["とんかつ", "焼肉", "ハンバーガー", "ラーメン", "中華料理", "インド料理", "カレー"]
-const LIGHT_CUISINES  = ["うどん", "そば", "軽食・カフェ", "日本料理", "タイ料理", "パスタ", "イタリア料理"]
+// 気分スコアリング用の料理タイプ分類（dishTypes フィールドと照合）
+const HEARTY_DISH_TYPES = ["とんかつ", "焼肉", "ハンバーガー", "ラーメン", "カレー", "ビビンバ", "ビャンビャン麺", "麺料理", "つけ麺", "きじ重", "丼", "親子丼", "焼き鳥", "ハンバーグ"]
+const LIGHT_DISH_TYPES  = ["パスタ", "ピッツァ", "寿司", "刺身", "海鮮", "ガパオ", "米粉", "タパス", "オムライス", "コーヒー", "サンドイッチ", "洋食", "定食"]
 
 // 気分問卷の質問定義
 const QUIZ_QUESTIONS = [
@@ -73,10 +72,9 @@ const QUIZ_QUESTIONS = [
 // ============================================================
 export default function App() {
   // フィルター状態
-  const [maxWalk, setMaxWalk] = useState(10)
+  const [maxWalk, setMaxWalk] = useState(7)
   const [cuisine, setCuisine] = useState("すべて")
   const [dishType, setDishType] = useState("すべて")
-  const [payment, setPayment] = useState("すべて")
 
   // 現在時刻（1分ごとに更新）
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -118,13 +116,12 @@ export default function App() {
       if (r.walkingMinutes !== null && r.walkingMinutes > maxWalk) return false
       if (cuisine !== "すべて" && r.cuisine !== cuisine) return false
       if (dishType !== "すべて" && !(r.dishTypes ?? []).includes(dishType)) return false
-      if (payment !== "すべて" && !r.payment.includes(payment)) return false
       return true
     })
     .sort((a, b) => {
       const aClosed = a.closedDays.includes(todayEn)
       const bClosed = b.closedDays.includes(todayEn)
-      if (aClosed === bClosed) return (a.walkingMinutes ?? 99) - (b.walkingMinutes ?? 99)
+      if (aClosed === bClosed) return (b.googleRating ?? 0) - (a.googleRating ?? 0)
       return aClosed ? 1 : -1
     })
 
@@ -178,9 +175,9 @@ export default function App() {
     const scored = available.map(r => {
       let score = 0
 
-      // 気分スコア
-      if (answers.appetite === 'hearty' && HEARTY_CUISINES.includes(r.cuisine)) score += 3
-      if (answers.appetite === 'light'  && LIGHT_CUISINES.includes(r.cuisine))  score += 3
+      // 気分スコア（dishTypes との照合）
+      if (answers.appetite === 'hearty' && (r.dishTypes ?? []).some(d => HEARTY_DISH_TYPES.includes(d))) score += 3
+      if (answers.appetite === 'light'  && (r.dishTypes ?? []).some(d => LIGHT_DISH_TYPES.includes(d)))  score += 3
 
       // コンディション：疲れ気味 → 近い店を優先
       if (answers.condition === 'tired' && r.walkingMinutes !== null && r.walkingMinutes <= 5) score += 2
@@ -230,17 +227,19 @@ export default function App() {
       {/* フィルターパネル */}
       <div className="filter-panel">
         <div className="filter-item">
-          <label className="filter-label">🚶 徒歩時間</label>
-          <div className="walk-options">
-            {[3, 5, 8, 10].map(min => (
-              <button
-                key={min}
-                className={`walk-btn ${maxWalk === min ? 'is-active' : ''}`}
-                onClick={() => setMaxWalk(min)}
-              >
-                {min}分以内
-              </button>
-            ))}
+          <label className="filter-label">🚶 徒歩時間：{maxWalk}分以内</label>
+          <div className="walk-slider-wrapper">
+            <span className="walk-slider-min">1分</span>
+            <input
+              type="range"
+              min={1}
+              max={7}
+              step={1}
+              value={maxWalk}
+              onChange={e => setMaxWalk(Number(e.target.value))}
+              className="walk-slider"
+            />
+            <span className="walk-slider-max">7分</span>
           </div>
         </div>
 
@@ -255,12 +254,6 @@ export default function App() {
             <label className="filter-label">🥘 料理タイプ</label>
             <select value={dishType} onChange={e => setDishType(e.target.value)} className="filter-select">
               {DISH_TYPE_OPTIONS.map(d => <option key={d}>{d}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label className="filter-label">💳 支払い</label>
-            <select value={payment} onChange={e => setPayment(e.target.value)} className="filter-select">
-              {PAYMENT_OPTIONS.map(p => <option key={p}>{p}</option>)}
             </select>
           </div>
         </div>
@@ -330,7 +323,7 @@ export default function App() {
       {/* 検索結果件数 */}
       <p className="result-count">
         {filtered.length > 0
-          ? `${filtered.length}件のお店が見つかりました`
+          ? <><span className="result-count-num">{filtered.length}</span>件のお店が見つかりました</>
           : "条件に合うお店が見つかりませんでした 😢"
         }
       </p>
@@ -353,10 +346,17 @@ export default function App() {
 // レストランカードコンポーネント
 // ============================================================
 function RestaurantCard({ restaurant: r, isClosed, isHighlighted = false }) {
-  return (
-    <div className={`restaurant-card ${isClosed ? 'is-closed' : ''} ${isHighlighted ? 'is-highlighted' : ''}`}>
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' ' + (r.address ?? ''))}`
 
-      {/* 画像エリア（shop・dish フォルダから ID.png を取得。存在しない場合は非表示） */}
+  return (
+    <a
+      className={`restaurant-card ${isClosed ? 'is-closed' : ''} ${isHighlighted ? 'is-highlighted' : ''}`}
+      href={mapsUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+
+      {/* 画像エリア（shop フォルダから ID.png を取得。存在しない場合は非表示） */}
       <div className="card-images">
         <div className="card-image-slot">
           <img
@@ -364,15 +364,6 @@ function RestaurantCard({ restaurant: r, isClosed, isHighlighted = false }) {
             alt={`${r.name} 店舗`}
             onError={e => { e.target.closest('.card-image-slot').style.display = 'none' }}
           />
-          <span className="image-label">店舗</span>
-        </div>
-        <div className="card-image-slot">
-          <img
-            src={`/images/dish/${r.id}.png`}
-            alt={`${r.name} 料理`}
-            onError={e => { e.target.closest('.card-image-slot').style.display = 'none' }}
-          />
-          <span className="image-label">料理</span>
         </div>
         {isClosed && <div className="closed-badge">本日定休</div>}
       </div>
@@ -428,6 +419,6 @@ function RestaurantCard({ restaurant: r, isClosed, isHighlighted = false }) {
 
         {r.note && <p className="card-note">📝 {r.note}</p>}
       </div>
-    </div>
+    </a>
   )
 }
