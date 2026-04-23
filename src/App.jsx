@@ -76,12 +76,7 @@ export default function App() {
   const [cuisine, setCuisine] = useState("すべて")
   const [dishType, setDishType] = useState("すべて")
 
-  // 現在時刻（1分ごとに更新）
-  const [currentTime, setCurrentTime] = useState(new Date())
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000)
-    return () => clearInterval(timer)
-  }, [])
+
 
   // 天気情報
   const [weather, setWeather] = useState(null)
@@ -105,10 +100,6 @@ export default function App() {
   const [quizAnswers, setQuizAnswers] = useState({})
   const [picked, setPicked]         = useState(null)   // 選ばれた店舗
 
-  /** 時刻を HH:MM 形式にフォーマット */
-  const timeLabel = currentTime.toLocaleTimeString('ja-JP', {
-    hour: '2-digit', minute: '2-digit', hour12: false,
-  })
 
   // フィルター適用済み店舗リスト（定休日は除外せず後ソート）
   const filtered = restaurants
@@ -210,19 +201,21 @@ export default function App() {
       {/* ヘッダー */}
       <header className="app-header">
         <h1>🍱 今日のランチどこ行く？</h1>
-        <p className="app-subtitle">今日は{DAY_NAMES_JA[todayEn]}日</p>
-        <div className="info-bar">
-          <span className="info-time">🕐 {timeLabel}</span>
-          <span className="info-weather">
-            {weatherLoading && "天気を取得中…"}
-            {weatherError   && "天気情報を取得できませんでした"}
-            {weather && (() => {
-              const { label, emoji } = getWeatherInfo(weather.weather_code)
-              return `${emoji} ${label} ${weather.temperature_2m}°C`
-            })()}
-          </span>
-        </div>
+        <p className="app-tagline">AIには真似できない、ひとくちの幸せ</p>
       </header>
+
+      {/* 曜日・天気バー */}
+      <div className="filter-info-bar">
+        <span className="filter-day">📅 今日は{DAY_NAMES_JA[todayEn]}日</span>
+        <span className="filter-weather">
+          {weatherLoading && "天気取得中…"}
+          {weatherError   && "天気情報なし"}
+          {weather && (() => {
+            const { label, emoji } = getWeatherInfo(weather.weather_code)
+            return `${emoji} ${label} ${weather.temperature_2m}°C`
+          })()}
+        </span>
+      </div>
 
       {/* フィルターパネル */}
       <div className="filter-panel">

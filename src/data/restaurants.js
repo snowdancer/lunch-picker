@@ -181,7 +181,7 @@ export const restaurants = [
   {
     id: 20,
     name: "VINOMONDO WINE&COFFEE",
-    cuisine: "イタリア料理",
+    cuisine: "コーヒー・軽食",
     walkingMinutes: 2,
     closedDays: ["Tuesday"],
     priceRange: "¥1,500〜2,000",
@@ -229,7 +229,7 @@ export const restaurants = [
   {
     id: 23,
     name: "PEACE COFFEE ROASTERS",
-    cuisine: "アメリカ料理",
+    cuisine: "コーヒー・軽食",
     walkingMinutes: 5,
     closedDays: [],
     priceRange: "¥800〜1,200",

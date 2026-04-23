@@ -26,7 +26,7 @@ body {
    ============================================================ */
 .app-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .app-header h1 {
@@ -36,31 +36,31 @@ body {
   color: #222;
 }
 
-.app-subtitle {
-  margin: 0 0 10px;
+.app-tagline {
+  margin: 0;
   font-size: 13px;
-  color: #999;
+  color: #c96a00;
+  font-style: italic;
+  letter-spacing: 0.04em;
 }
 
-/* 時刻・天気バー */
-.info-bar {
-  display: inline-flex;
+/* 曜日・天気バー（フィルターパネル外・上部） */
+.filter-info-bar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 6px 16px;
   font-size: 13px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-  color: #555;
+  color: #666;
+  margin-bottom: 6px;
+  padding: 0 4px;
 }
 
-.info-time {
+.filter-day {
   font-weight: 600;
   color: #444;
 }
 
-.info-weather {
+.filter-weather {
   color: #666;
 }
 
